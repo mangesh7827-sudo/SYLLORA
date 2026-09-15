@@ -1,0 +1,12 @@
+import { localStorageAdapter } from '@/services/storage/storage';
+import type { AttendanceRecord, AttendanceSettings, Assignment, Experiment, ExtraLecture, Habit, HabitRecord, TimetableEntry } from '@/types';
+export interface Phase8Store { attendance:AttendanceRecord[]; attendanceSettings:AttendanceSettings[]; timetable:TimetableEntry[]; extraLectures:ExtraLecture[]; assignments:Assignment[]; experiments:Experiment[]; habits:Habit[]; habitRecords:HabitRecord[]; }
+const KEY='syllora:phase8:data:v1';
+export const emptyPhase8Store=():Phase8Store=>({attendance:[],attendanceSettings:[],timetable:[],extraLectures:[],assignments:[],experiments:[],habits:[],habitRecords:[]});
+export function readStore():Phase8Store{return localStorageAdapter.get<Phase8Store>(KEY)??emptyPhase8Store();}
+export function writeStore(store:Phase8Store){localStorageAdapter.set(KEY,store);}
+export function userStore(userId:string):Phase8Store{const s=readStore(); return {attendance:s.attendance.filter(x=>x.userId===userId),attendanceSettings:s.attendanceSettings.filter(x=>x.userId===userId),timetable:s.timetable.filter(x=>x.userId===userId),extraLectures:s.extraLectures.filter(x=>x.userId===userId),assignments:s.assignments.filter(x=>x.userId===userId),experiments:s.experiments.filter(x=>x.userId===userId),habits:s.habits.filter(x=>x.userId===userId),habitRecords:s.habitRecords.filter(x=>x.userId===userId)};}
+export function persistUserStore(userId:string,u:Phase8Store){const s=readStore(); writeStore({attendance:[...s.attendance.filter(x=>x.userId!==userId),...u.attendance],attendanceSettings:[...s.attendanceSettings.filter(x=>x.userId!==userId),...u.attendanceSettings],timetable:[...s.timetable.filter(x=>x.userId!==userId),...u.timetable],extraLectures:[...s.extraLectures.filter(x=>x.userId!==userId),...u.extraLectures],assignments:[...s.assignments.filter(x=>x.userId!==userId),...u.assignments],experiments:[...s.experiments.filter(x=>x.userId!==userId),...u.experiments],habits:[...s.habits.filter(x=>x.userId!==userId),...u.habits],habitRecords:[...s.habitRecords.filter(x=>x.userId!==userId),...u.habitRecords]});}
+export const makeId=(prefix:string)=>`${prefix}-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+export const now=()=>new Date().toISOString();
+export function assertText(value:string,label:string,max=160){if(!value.trim())throw new Error(`${label} is required.`);if(value.trim().length>max)throw new Error(`${label} must be ${max} characters or fewer.`);}

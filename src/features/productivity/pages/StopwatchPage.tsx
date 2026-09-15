@@ -1,0 +1,5 @@
+import { AcademicPageHeader } from '@/features/academics/components/AcademicPageHeader';
+import { StudyTimerPanel } from '../components/StudyTimerPanel';
+import { Card } from '@/components/ui/Card';
+import { Icon } from '@/components/icons/Icon';
+export function StopwatchPage() { return <div className="productivity-page productivity-stopwatch"><AcademicPageHeader title="Stopwatch" description="A focused study timer that remains accurate through navigation, pauses, and browser throttling." /><StudyTimerPanel /><Card className="stopwatch-principles"><div className="productivity-list-header"><div><p className="academic-eyebrow">Timer behavior</p><h2>Built for accurate study time</h2></div></div><ul><li><Icon name="clock" /><span><strong>Timestamp-based</strong>Elapsed time comes from real timestamps, not interval counts.</span></li><li><Icon name="check" /><span><strong>Pause-aware</strong>Paused time is excluded from the saved duration.</span></li><li><Icon name="dashboard" /><span><strong>Navigation-safe</strong>The active session lives behind the service layer and can be restored after refresh in mock mode.</span></li></ul></Card></div>; }
